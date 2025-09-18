@@ -66,7 +66,18 @@ export class CallService {
             port: environment.peer.port,
             path: environment.peer.path,
             secure: environment.peer.secure,
-            config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] },
+            config: { 
+              iceServers: [
+                { 
+                  urls: 'stun:stun.l.google.com:19302' 
+                },
+                { 
+                  urls: 'turn:messages.davidruiz.site:3478',
+                  username: 'sennt03',
+                  credential: 'alskA3299mdosmDAS'
+                }
+              ] 
+            },
             debug: 3
             // debug: 3,
             // config: {

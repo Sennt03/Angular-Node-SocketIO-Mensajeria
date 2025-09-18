@@ -61,43 +61,49 @@ export class CallService {
   public initPeer(idPeer: string): Boolean {
     if (!this.peer || this.peer.disconnected) {
         try {
-          this.peer = new Peer(idPeer, {
-            host: environment.peer.host,
-            port: environment.peer.port,
-            path: environment.peer.path,
-            secure: environment.peer.secure,
-            config: { 
-              iceServers: [
-                { 
-                  urls: 'stun:stun.l.google.com:19302' 
+            this.peer = new Peer(idPeer, {
+                host: environment.peer.host,
+                port: environment.peer.port,
+                path: environment.peer.path,
+                secure: environment.peer.secure,
+                config: { 
+                  iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { 
+                      urls: 'turn:messages.davidruiz.site:3478',
+                      username: 'sennt03',
+                      credential: 'alskA3299mdosmDAS'
+                    }
+                  ] 
                 },
-                { 
-                  urls: 'turn:messages.davidruiz.site:3478',
-                  username: 'sennt03',
-                  credential: 'alskA3299mdosmDAS'
-                }
-              ] 
-            },
-            debug: 3
-            // debug: 3,
-            // config: {
-            //     iceServers: [
-            //         {
-            //             urls: [
-            //                 'stun:stun1.l.google.com:19302',
-            //                 'stun:stun2.l.google.com:19302',
-            //             ],
-            //         }]
-            // }
-          })
-          
-          return true
+                debug: 3
+            });
+
+            // Debug para ver si se conecta al PeerServer
+            this.peer.on('open', (id) => {
+                console.log('[PeerJS] Conectado con id:', id);
+            });
+
+            this.peer.on('error', (err) => {
+                console.error('[PeerJS ERROR]', err);
+            });
+
+            this.peer.on('disconnected', () => {
+                console.warn('[PeerJS] Peer desconectado');
+            });
+
+            this.peer.on('close', () => {
+                console.warn('[PeerJS] Peer cerrado');
+            });
+
+            return true;
         } catch (error) {
-          return false
+            console.error('[PeerJS INIT ERROR]', error);
+            return false;
         }
     }
 
-    return true
+    return true;
   }
 
   public enableCallAnswer(stream) {

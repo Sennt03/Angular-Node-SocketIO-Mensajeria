@@ -1,6 +1,10 @@
-# SenntMessages
+# Messages - Angular (NGRX) y NodeJS (SocketIO)
 App de mensajeria en tiempo real con socket.io
-* Envio de mensajes, audios, imagenes, documentos, ubicación.
+
+- La app utiliza Socket.IO para comunicación en tiempo real entre usuarios y NgRx en Angular para gestionar el estado de la aplicación (chats, notificaciones, vistos, etc) de manera eficiente y escalable.
+
+## Features
+* Envio de mensajes, grabación de audios, envío de imagenes, documentos, ubicación.
 * Eliminar mensajes, bloquear usuarios, traducir mensajes.
 * Configuración de perfil, cambio de contraseña.
 

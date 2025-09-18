@@ -16,11 +16,21 @@ const optionsCors = { origin: (origin, callback) => {
     }
 }
 
+// const fs = require('fs');
+// const https = require('https');
+// const options = {
+//   key: fs.readFileSync('C:/Users/David/Proyectos/ssl/server.key'),
+//   cert: fs.readFileSync('C:/Users/David/Proyectos/ssl/server.cert')
+// };
+
+
 class App{
 
     constructor(){
         this.app = express()
         this.server = require('http').Server(this.app)
+        // this.server = https.createServer(options, this.app);
+
         this.middlewares()
         this.initializations()
         this.routes()
@@ -53,6 +63,7 @@ class App{
     }
 
     start(){
+        // this.serverPeer = this.server.listen(config.port, '192.168.100.75', () => {
         this.serverPeer = this.server.listen(config.port, () => {
             if(config.dev) config.whiteList.push('http://localhost:4200')
             console.log('Server on port', config.port)
@@ -70,6 +81,19 @@ class App{
         const peerServer = ExpressPeerServer(this.serverPeer, {
             path: '/connect'
         })
+
+        peerServer.on('connection', (client) => {
+            console.log(`Peer conectado: ${client.getId()}`);
+        });
+
+        peerServer.on('disconnect', (client) => {
+            console.log(`Peer desconectado: ${client.getId()}`);
+        });
+
+        peerServer.on('error', err => {
+            console.error('PeerJS error:', err)
+        })
+
         
         this.app.use('/peerjs', peerServer)
     }

@@ -294,43 +294,97 @@ export class InputComponent implements OnInit {
       }, 0);
   };
 
-  recordAudio(){
+  // recordAudio(){
+  //   setTimeout(() => {
+  //     document.getElementById('input-container').classList.add('hiden_input_delay')
+  //   }, 800);
+  //   this.showAudioDiv = true
+  //   this.showImageDiv = false
+
+  //   if (this.mediaRecorder) return sendAlert(this.eventOpenAlert, 'Is already recording')
+  //   navigator.mediaDevices.getUserMedia({audio: true})
+  //       .then(
+  //           stream => {
+  //               this.mediaRecorder = new MediaRecorder(stream);
+  //               this.mediaRecorder.start();
+  //               this.comenzarAContar();
+  //               const fragmentosDeAudio = [];
+  //               this.mediaRecorder.addEventListener("dataavailable", evento => {
+  //                   fragmentosDeAudio.push(evento.data);
+  //               });
+
+  //               this.mediaRecorder.addEventListener("stop", () => {
+  //                   stream.getTracks().forEach(track => track.stop());
+  //                   this.detenerConteo();
+  //                   if(!this.cancelAudioComp){
+  //                     const blobAudio: any = new Blob(fragmentosDeAudio);
+  //                     blobAudio.lastModifiedDate = new Date();
+  //                     blobAudio.name = `audio${Date.now()}.ogg`;
+  //                     this.sendAudio(blobAudio)
+  //                   }
+  //               });
+  //           }
+  //       )
+  //       .catch(error => {
+  //           // Aquí maneja el error, tal vez no dieron permiso
+  //           sendAlert(this.eventOpenAlert, 'Unable to record audio. Give microphone permission and try again')
+  //       });
+  // }
+
+  async recordAudio() {
     setTimeout(() => {
-      document.getElementById('input-container').classList.add('hiden_input_delay')
+      document.getElementById('input-container')?.classList.add('hiden_input_delay');
     }, 800);
-    this.showAudioDiv = true
-    this.showImageDiv = false
 
-    if (this.mediaRecorder) return sendAlert(this.eventOpenAlert, 'Is already recording')
-    navigator.mediaDevices.getUserMedia({audio: true})
-        .then(
-            stream => {
-                this.mediaRecorder = new MediaRecorder(stream);
-                this.mediaRecorder.start();
-                this.comenzarAContar();
-                const fragmentosDeAudio = [];
-                this.mediaRecorder.addEventListener("dataavailable", evento => {
-                    fragmentosDeAudio.push(evento.data);
-                });
+    this.showAudioDiv = true;
+    this.showImageDiv = false;
 
-                this.mediaRecorder.addEventListener("stop", () => {
-                    stream.getTracks().forEach(track => track.stop());
-                    this.detenerConteo();
-                    if(!this.cancelAudioComp){
-                      const blobAudio: any = new Blob(fragmentosDeAudio);
-                      blobAudio.lastModifiedDate = new Date();
-                      blobAudio.name = `audio${Date.now()}.ogg`;
-                      this.sendAudio(blobAudio)
-                    }
-                });
-            }
-        )
-        .catch(error => {
-            // Aquí maneja el error, tal vez no dieron permiso
-            sendAlert(this.eventOpenAlert, 'Unable to record audio. Give microphone permission and try again')
-        });
+    if (this.mediaRecorder) {
+      return sendAlert(this.eventOpenAlert, 'Already recording');
+    }
 
+    try {
+      // Verificamos permisos antes de pedir getUserMedia
+      const permissions = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+
+      if (permissions.state === 'denied') {
+        // Si ya está denegado, intentamos de nuevo
+        return sendAlert(this.eventOpenAlert, 'Microphone access denied. Please allow permission to continue');
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      this.mediaRecorder = new MediaRecorder(stream);
+      this.mediaRecorder.start();
+      this.comenzarAContar();
+
+      const fragmentosDeAudio: Blob[] = [];
+      this.mediaRecorder.addEventListener("dataavailable", evento => {
+        fragmentosDeAudio.push(evento.data);
+      });
+
+      this.mediaRecorder.addEventListener("stop", () => {
+        stream.getTracks().forEach(track => track.stop());
+        this.detenerConteo();
+        if (!this.cancelAudioComp) {
+          const blobAudio: any = new Blob(fragmentosDeAudio, { type: 'audio/ogg' });
+          blobAudio.lastModifiedDate = new Date();
+          blobAudio.name = `audio${Date.now()}.ogg`;
+          this.sendAudio(blobAudio);
+        }
+      });
+
+    } catch (error: any) {
+      if (error.name === "NotAllowedError") {
+        sendAlert(this.eventOpenAlert, "Microphone permission denied. Please allow access to record audio.");
+      } else if (error.name === "NotFoundError") {
+        sendAlert(this.eventOpenAlert, "No microphone found on this device.");
+      } else {
+        sendAlert(this.eventOpenAlert, "Unable to record audio. Please check your microphone settings.");
+      }
+    }
   }
+
 
 
   // LOCATION

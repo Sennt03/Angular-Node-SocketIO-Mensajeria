@@ -59,7 +59,8 @@ textarea {
             position: absolute;
             bottom: 14px;
             right: 25px;
-            color: $gris-claro;
+            // color: $gris-claro;
+            color: $primary;
             cursor: pointer;
         }
 
@@ -81,7 +82,8 @@ textarea {
         display: flex;
         justify-content: center;
         align-items: center;
-        background: #C4C4C4;
+        // background: #C4C4C4;
+        background: $primary;
         border-radius: 50px;
         cursor: pointer;
         padding-left: 3px;

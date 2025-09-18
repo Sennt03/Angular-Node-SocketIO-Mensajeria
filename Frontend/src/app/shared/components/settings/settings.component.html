@@ -15,11 +15,11 @@
           </div>
         </div>
         
-        <div class="lang notTranslate">Translate messages
+        <!-- <div class="lang notTranslate">Translate messages
           <mat-slide-toggle (change)="toggleActive($event)" [checked]="active"></mat-slide-toggle>
-        </div>
+        </div> -->
     
-        <div class="search" *ngIf="active">
+        <!-- <div class="search" *ngIf="active">
           <input type="text" [formControl]="inputSearch" id="inputSearch" placeholder="Search language" autocomplete="off" 
           (focus)="search()" (blur)="search(false)">
           <mat-icon class="search-icon">search</mat-icon>
@@ -33,7 +33,7 @@
             <div class="lang"><span>Actual language: </span>{{ langActive }}</div>
             <div class="lang" *ngFor="let lang of langs" (click)="selectLang(lang)">{{lang[1]}}</div>
         </div>
-      </div>
+      </div> -->
       </div>
   
     <app-mini-alert [eventOpenAlert]="eventOpenAlert.asObservable()"></app-mini-alert>

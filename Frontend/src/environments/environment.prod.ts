@@ -5,14 +5,9 @@ export const environment = {
   socket_url: '/',
   imgDefault: 'https://res.cloudinary.com/sennt03/image/upload/v1644190649/qxxzb23ov7corfsptvi5.png',
   peer: {
-    // host: '52.207.247.119',
-    // port: 3004,
-    // path: '/peerjs/connect',
-    // secure: false
-    host: 'messages.david-ruiz.online',
-    port: 433,
-    // path: '/peerjs/connect',
-    path: '/peerjs',
+    host: 'messages.davidruiz.site',
+    port: 443,
+    path: '/peerjs/connect',
     secure: true
   },
   events: {

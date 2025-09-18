@@ -16,7 +16,7 @@ const optionsCors = { origin: (origin, callback) => {
     }
 }
 
-// const fs = require('fs');
+const fs = require('fs');
 // const https = require('https');
 // const options = {
 //   key: fs.readFileSync('C:/Users/David/Proyectos/ssl/server.key'),
@@ -79,7 +79,9 @@ class App{
 
     startServerPeer(){
         const peerServer = ExpressPeerServer(this.serverPeer, {
-            path: '/connect'
+            path: '/connect',
+            debug: true,
+            allow_discovery: true,
         })
 
         peerServer.on('connection', (client) => {

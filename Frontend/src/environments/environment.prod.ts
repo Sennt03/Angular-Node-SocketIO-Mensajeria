@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
-  url_base: 'as/',
-  url_api: 'as/api',
-  socket_url: 'as/',
+  url_base: '/',
+  url_api: '/api',
+  socket_url: '/',
   imgDefault: 'https://res.cloudinary.com/sennt03/image/upload/v1644190649/qxxzb23ov7corfsptvi5.png',
   peer: {
     host: 'messages.davidruiz.site',

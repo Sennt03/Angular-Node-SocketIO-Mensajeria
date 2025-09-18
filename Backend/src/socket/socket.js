@@ -7,7 +7,8 @@ const socket = {}
 function connect(server){
     socket.io = socketIO(server, { cors: {
         origin: true,
-        methods: ['GET', 'POST']
+        methods: ['GET', 'POST'],
+        perMessageDeflate: false
     } })
 
     listenSockets()
